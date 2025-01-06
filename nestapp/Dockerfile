@@ -31,7 +31,7 @@ RUN amazon-linux-extras enable php8.0 && \
     php-tokenizer \
     php-xml \
     php-curl
-    
+
 # Download the MySQL repository package
 RUN wget https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm
 
@@ -80,16 +80,19 @@ ENV RDS_MASTER_USERNAME=$RDS_MASTER_USERNAME
 ENV RDS_DB_PASSWORD=$RDS_DB_PASSWORD
 
 # Clone the GitHub repository
-RUN git clone https://$PERSONAL_ACCESS_TOKEN@github.com/$GITHUB_USERNAME/$REPOSITORY_NAME.git
+RUN git clone https://$GITHUB_USERNAME:$PERSONAL_ACCESS_TOKEN@github.com/az-salu/nest-app-code.git /var/www/html
+#RUN unzip nest-app-code.zip -d nest-app-code
 
-# Unzip the zip folder containing the web files
-RUN unzip $REPOSITORY_NAME/$WEB_FILE_ZIP -d $REPOSITORY_NAME/
+
 
 # Copy the web files into the HTML directory
-RUN cp -av $REPOSITORY_NAME/$WEB_FILE_UNZIP/. /var/www/html
+#RUN cp -R -d nest-app-code/. /var/www/html
 
 # Remove the repository we cloned
-RUN rm -rf $REPOSITORY_NAME
+RUN rm -rf nest-app-code -d nest-app-code.zip
+
+RUN mkdir -p /var/www/html/storage && chmod -R 777 /var/www/html/storage
+
 
 # Enable the mod_rewrite setting in the httpd.conf file
 RUN sed -i '/<Directory "\/var\/www\/html">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
