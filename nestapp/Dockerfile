@@ -13,6 +13,10 @@ RUN yum install -y wget
 # Install Apache
 RUN yum install -y httpd
 
+# Set ServerName in the Apache configuration to suppress the warning
+RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+
+
 # Install PHP and various extensions
 RUN amazon-linux-extras enable php8.0 && \
   yum clean metadata && \
