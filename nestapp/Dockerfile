@@ -86,8 +86,6 @@ RUN git clone https://$GITHUB_USERNAME:$PERSONAL_ACCESS_TOKEN@github.com/az-salu
 
 
 
-# Copy the web files into the HTML directory
-#RUN cp -R -d nest-app-code/. /var/www/html
 
 # Remove the repository we cloned
 RUN rm -rf nest-app-code -d nest-app-code.zip
@@ -128,5 +126,12 @@ COPY AppServiceProvider.php app/Providers/AppServiceProvider.php
 # Expose the default Apache and MySQL ports
 EXPOSE 80 3306
 
-# Start Apache and MySQL
-ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# Copy the start-services script into the container
+COPY start-services.sh /usr/local/bin/start-services.sh
+
+
+#Ensure the script is executable
+RUN chmod +x /usr/local/bin/start-services.sh
+
+# Run the script to start both PHP-FPM and Apache 
+CMD ["/usr/local/bin/start-services.sh"]
