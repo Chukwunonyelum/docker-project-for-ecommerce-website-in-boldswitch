@@ -1,3 +1,5 @@
+Dynamic Web App Docker.png
+
 # docker-project-for-the-5th-assignment
 ### Updated README File with `.gitignore` Section
 
